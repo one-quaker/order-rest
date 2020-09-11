@@ -33,4 +33,4 @@ class OrderSerializer(serializers.ModelSerializer):
 class TableSerializer(serializers.ModelSerializer):
     class Meta:
         model = Table
-        fields = ['number', 'seats_count', 'shape']
+        fields = ['number', 'seats_count', 'size_x', 'size_y', 'pos_x', 'pos_y', 'shape']

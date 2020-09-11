@@ -5,7 +5,6 @@ from order_rest import views
 
 
 router = routers.DefaultRouter()
-router.register(r'user', views.UserViewSet)
 router.register(r'order', views.OrderViewSet)
 router.register(r'customer', views.CustomerViewSet)
 router.register(r'table', views.TableViewSet)

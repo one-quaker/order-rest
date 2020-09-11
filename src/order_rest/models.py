@@ -19,6 +19,10 @@ class Table(models.Model):
 
     number = models.PositiveIntegerField('Table number', unique=True)
     seats_count = models.PositiveIntegerField('Number of seats', default=4)
+    size_x = models.PositiveIntegerField('Size X in %', default=1)
+    size_y = models.PositiveIntegerField('Size Y in %', default=2)
+    pos_x = models.PositiveIntegerField('Position X', default=0)
+    pos_y = models.PositiveIntegerField('Position Y', default=0)
     shape = models.CharField('Shape of the table', choices=SHAPE_CHOICES, max_length=12)
 
     def __str__(self):
