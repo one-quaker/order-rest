@@ -32,3 +32,6 @@ class Order(models.Model):
 
     class Meta:
         unique_together = [['table', 'customer', 'booking_date']]
+
+    def __str__(self):
+        return f'{self.table} | {self.customer} | {self.booking_date}'

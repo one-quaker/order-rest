@@ -17,11 +17,11 @@ class CustomerSerializer(serializers.ModelSerializer):
 
 class OrderSerializer(serializers.ModelSerializer):
     table = serializers.HyperlinkedRelatedField(
-        read_only=True,
+        queryset=Table.objects.all(),
         view_name='table-detail'
     )
     customer = serializers.HyperlinkedRelatedField(
-        read_only=True,
+        queryset=Customer.objects.all(),
         view_name='customer-detail'
     )
 
