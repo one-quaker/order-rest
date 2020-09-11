@@ -1,12 +1,6 @@
-from django.contrib.auth.models import User
 from rest_framework import serializers
-from .models import Customer, Order, Table
 
-
-class UserSerializer(serializers.HyperlinkedModelSerializer):
-    class Meta:
-        model = User
-        fields = ['url', 'username', 'email', 'is_staff']
+from order_rest.models import Customer, Order, Table
 
 
 class CustomerSerializer(serializers.ModelSerializer):
@@ -15,22 +9,34 @@ class CustomerSerializer(serializers.ModelSerializer):
         fields = ['name', 'email']
 
 
+class TableSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Table
+        fields = ['pk', 'number', 'seats_count', 'size_x', 'size_y', 'pos_x', 'pos_y', 'shape']
+
+
 class OrderSerializer(serializers.ModelSerializer):
-    table = serializers.HyperlinkedRelatedField(
-        queryset=Table.objects.all(),
-        view_name='table-detail'
-    )
-    customer = serializers.HyperlinkedRelatedField(
-        queryset=Customer.objects.all(),
-        view_name='customer-detail'
-    )
+    table = TableSerializer()
+    customer = CustomerSerializer()
+
+    def validate(self, attrs):
+        table = attrs['table']
+        booking_date = attrs['booking_date']
+        if Order.objects.filter(table=table, booking_date=booking_date).exists():
+            raise serializers.ValidationError(f'Table number: {table.number} - already booked on {booking_date}')
+        return attrs
 
     class Meta:
         model = Order
         fields = ['table', 'customer', 'booking_date']
 
 
-class TableSerializer(serializers.ModelSerializer):
+class TableOrderSerializer(serializers.ModelSerializer):
+    is_booked = serializers.SerializerMethodField()
+
+    def get_is_booked(self, obj):
+        return obj.id in self.context['booked_tables']
+
     class Meta:
         model = Table
-        fields = ['number', 'seats_count', 'size_x', 'size_y', 'pos_x', 'pos_y', 'shape']
+        fields = ['pk', 'is_booked']
