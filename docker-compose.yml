@@ -10,7 +10,7 @@ services:
             - ./sql_db:/var/lib/postgresql/data
 
     web_app:
-        image: onepycoder/order_rest:1.02
+        image: onepycoder/order_rest:1.03
         volumes:
             - ./src:/python_app
         ports:
