@@ -30,14 +30,14 @@ schema_view = get_schema_view(
       description='Order description',
    ),
    public=True,
-   permission_classes=(permissions.AllowAny,),
+   permission_classes=(permissions.AllowAny, ),
 )
 
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('doc/', schema_view.with_ui('swagger', cache_timeout=0), name='schema-redoc'),
-    re_path(r'api/(?P<version>[v1|v2]+)/', include('order_rest.urls')),
+    path(r'api/v1/', include(('order_rest.urls', 'order_rest'), namespace='order_rest')),
 ]
 
 if settings.DEBUG:

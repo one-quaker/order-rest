@@ -16,8 +16,23 @@ class TableSerializer(serializers.ModelSerializer):
 
 
 class OrderSerializer(serializers.ModelSerializer):
-    table = TableSerializer()
-    customer = CustomerSerializer()
+    table = serializers.HyperlinkedRelatedField(
+        queryset=Table.objects.all(),
+        view_name='order_rest:api-table-detail',
+    )
+    customer = serializers.HyperlinkedRelatedField(
+        queryset=Customer.objects.all(),
+        view_name='order_rest:api-customer-detail',
+    )
+
+    table_detail = serializers.SerializerMethodField()
+    customer_detail = serializers.SerializerMethodField()
+
+    def get_table_detail(self, obj: Order):
+        return TableSerializer(obj.table).data
+
+    def get_customer_detail(self, obj: Table):
+        return CustomerSerializer(obj.customer).data
 
     def validate(self, attrs):
         table = attrs['table']
@@ -28,7 +43,7 @@ class OrderSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Order
-        fields = ['table', 'customer', 'booking_date']
+        fields = ['customer', 'table', 'table_detail', 'customer_detail', 'booking_date']
 
 
 class TableOrderSerializer(serializers.ModelSerializer):
