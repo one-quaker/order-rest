@@ -12,6 +12,8 @@ inside docker container run `make` again
 
 ### Available urls
 
+http://localhost:8300/doc/ # API documentation
+
 http://localhost:8300/api/v1/order/ # order list
 
 http://localhost:8300/api/v1/table/ # table list
